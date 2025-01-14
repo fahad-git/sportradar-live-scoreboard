@@ -1,6 +1,5 @@
 package com.sportradar.challenge.livescoreboard.scoreboard;
 
-import com.sportradar.challenge.livescoreboard.match.Match;
 import com.sportradar.challenge.livescoreboard.match.MatchInterface;
 
 import java.util.List;

@@ -4,7 +4,9 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class MatchTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class MatchTest {
 
     private Match match;
 
