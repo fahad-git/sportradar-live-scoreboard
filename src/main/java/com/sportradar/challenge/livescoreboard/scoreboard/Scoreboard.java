@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class Scoreboard implements ScoreBoardInterface{
 
-    private List<Match> matches = new ArrayList<>();
+    private final List<Match> matches = new ArrayList<>();
     private int matchCounter = 1;
 
     @Override
