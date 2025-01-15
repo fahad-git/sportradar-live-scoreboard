@@ -2,25 +2,27 @@ package com.sportradar.challenge.livescoreboard.scoreboard;
 
 import com.sportradar.challenge.livescoreboard.exceptions.*;
 import com.sportradar.challenge.livescoreboard.match.MatchInterface;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 public class ScoreboardTest {
 
     private ScoreBoardInterface scoreBoard;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         scoreBoard = new Scoreboard();
     }
 
     // test startMatch method for successfully starting match.
     @Test
-    public void testStartMatchSuccessfully() {
+    void testStartMatchSuccessfully() {
         scoreBoard.startMatch("TeamA", "TeamB");
         List<MatchInterface> matches = scoreBoard.matchesSummary();
 
@@ -31,28 +33,28 @@ public class ScoreboardTest {
 
     // test startMatch method for validating duplicate team match. Throws error.
     @Test
-    public void testStartMatchDuplicate() {
+    void testStartMatchDuplicate() {
         scoreBoard.startMatch("TeamA", "TeamB");
         assertThrows(MatchAlreadyInProgress.class, () -> scoreBoard.startMatch("TeamA", "TeamB"));
     }
 
     // test StartMatch for empty name of team. Throws error.
     @Test
-    public void testStartMatchEmptyNames() {
+    void testStartMatchEmptyNames() {
         assertThrows(EmptyTeamNameException.class, () -> scoreBoard.startMatch("", "TeamB"));
         assertThrows(EmptyTeamNameException.class, () -> scoreBoard.startMatch("TeamA", ""));
     }
 
     // test startMatch for same team name. Throws error.
     @Test
-    public void testStartMatchSameTeamName() {
+    void testStartMatchSameTeamName() {
         assertThrows(SameTeamNameException.class, () -> scoreBoard.startMatch("TeamB", "TeamB"));
         assertThrows(SameTeamNameException.class, () -> scoreBoard.startMatch("TeamA", "TeamA"));
     }
 
     // test updateScore method for successfully updating match scores.
     @Test
-    public void testUpdateScoreSuccessful() {
+    void testUpdateScoreSuccessful() {
         scoreBoard.startMatch("TeamA", "TeamB");
         scoreBoard.updateScore("TeamA", "TeamB", 2, 3);
 
@@ -64,13 +66,13 @@ public class ScoreboardTest {
 
     // test updateScore method for updated score of match which has ended. Throws error.
     @Test
-    public void testUpdateScoreFailure() {
+    void testUpdateScoreFailure() {
         assertThrows(MatchNotFound.class, () -> scoreBoard.updateScore("TeamA", "TeamB", 2, 3));
     }
 
     // test finishMatch for successfully finishing match.
     @Test
-    public void testFinishMatchSuccessfully() {
+    void testFinishMatchSuccessfully() {
         scoreBoard.startMatch("TeamA", "TeamB");
         scoreBoard.finishMatch("TeamA", "TeamB");
 
@@ -80,13 +82,13 @@ public class ScoreboardTest {
 
     //  test finishMatch for finishing a match which is already finished. Throws error.
     @Test
-    public void testFinishMatchFailure() {
+    void testFinishMatchFailure() {
         assertThrows(MatchNotFound.class, () -> scoreBoard.finishMatch("TeamA", "TeamB"));
     }
 
     // test matchesSummary for providing matches in progress in the correct order.
     @Test
-    public void testMatchesSummary() {
+    void testMatchesSummary() {
         scoreBoard.startMatch("TeamA", "TeamB");
         scoreBoard.updateScore("TeamA", "TeamB", 1, 1);
 
