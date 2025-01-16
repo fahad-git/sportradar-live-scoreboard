@@ -1,6 +1,5 @@
 package com.sportradar.challenge.livescoreboard.scoreboard;
 
-import com.sportradar.challenge.livescoreboard.exceptions.*;
 import com.sportradar.challenge.livescoreboard.match.MatchInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
