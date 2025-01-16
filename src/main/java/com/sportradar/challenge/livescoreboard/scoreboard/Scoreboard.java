@@ -1,12 +1,12 @@
 package com.sportradar.challenge.livescoreboard.scoreboard;
 
-import com.sportradar.challenge.livescoreboard.exceptions.*;
 import com.sportradar.challenge.livescoreboard.match.Match;
 import com.sportradar.challenge.livescoreboard.match.MatchInterface;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public class Scoreboard implements ScoreBoardInterface{
@@ -21,7 +21,7 @@ public class Scoreboard implements ScoreBoardInterface{
 
         // check if match is already in progress throw an error.
         if(this.findMatch(homeTeam, awayTeam) != null){
-            throw new MatchAlreadyInProgress("MATCH IN PROGRESS: Cannot start a match that is already in progress.");
+            throw new IllegalStateException("MATCH IN PROGRESS: Cannot start a match that is already in progress.");
         }
 
         // creating new object of Match and adding it to the list of matches.
@@ -36,17 +36,18 @@ public class Scoreboard implements ScoreBoardInterface{
 
         // validating team scores
         if(homeTeamNewScore < 0 || awayTeamNewScore < 0){
-            throw new NegativeScoreValueException("NEGATIVE SCORE VALUE: Team score can not be negative.");
+            throw new IllegalArgumentException("NEGATIVE SCORE VALUE: Team score can not be negative.");
         }
 
-        // retrieving an existing match
+        // retrieving an existing match.
         Match existingMatch = findMatch(homeTeam, awayTeam);
 
         if(existingMatch == null){
-            throw new MatchNotFound("MATCH NOT FOUND: No match between " + homeTeam + " and " + awayTeam + " in progress.");
+            throw new NoSuchElementException("MATCH NOT FOUND: No match between " + homeTeam + " and " + awayTeam + " in progress.");
         } else if(!existingMatch.getMatchInProgress()){
-            throw new MatchNotInProgress("MATCH NOT IN PROGRESS: No match between " + homeTeam + " and " + awayTeam + " in progress.");
+            throw new IllegalStateException("MATCH NOT IN PROGRESS: No match between " + homeTeam + " and " + awayTeam + " in progress.");
         } else{
+            // update scores for each team separately.
             existingMatch.setHomeTeamScore(homeTeamNewScore);
             existingMatch.setAwayTeamScore(awayTeamNewScore);
         }
@@ -61,15 +62,16 @@ public class Scoreboard implements ScoreBoardInterface{
         Match existingMatch = findMatch(homeTeam, awayTeam);
 
         if(existingMatch != null){
+            // soft deletion: it will remove existing match from scoreboard.
             existingMatch.setMatchInProgress(false);
         } else {
-            throw new MatchNotFound("MATCH NOT FOUND: No match between " + homeTeam + " and " + awayTeam + " in progress.");
+            throw new NoSuchElementException("MATCH NOT FOUND: No match between " + homeTeam + " and " + awayTeam + " in progress.");
         }
     }
 
     @Override
     public List<MatchInterface> matchesSummary() {
-        // creating a new list for matches in progress. MatchInterface only supports read but not write/update.
+        // creating a new list for matches in progress. MatchInterface only supports read but not write/update operations.
         List<MatchInterface> matchesInProgress = matches.stream()
                 .filter(MatchInterface::getMatchInProgress)
                 .collect(Collectors.toList());
@@ -91,14 +93,14 @@ public class Scoreboard implements ScoreBoardInterface{
 
 
     private void validateTeams(String homeTeam, String awayTeam){
-        // trim and validate team names
+        // trim and validate team names.
         homeTeam = homeTeam.trim();
         awayTeam = awayTeam.trim();
 
         if(homeTeam.isEmpty() || awayTeam.isEmpty()){
-            throw new EmptyTeamNameException("Empty Team Name: Team name can not be empty.");
+            throw new IllegalArgumentException("Empty Team Name: Team name can not be empty.");
         }else if(homeTeam.equalsIgnoreCase(awayTeam.toLowerCase())){
-            throw new SameTeamNameException("Same Team Name: Both teams can not be same.");
+            throw new IllegalArgumentException("Same Team Name: Both teams can not be same.");
         }
     }
 

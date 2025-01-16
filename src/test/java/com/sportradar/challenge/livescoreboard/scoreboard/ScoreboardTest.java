@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,21 +36,21 @@ public class ScoreboardTest {
     @Test
     void testStartMatchDuplicate() {
         scoreBoard.startMatch("TeamA", "TeamB");
-        assertThrows(MatchAlreadyInProgress.class, () -> scoreBoard.startMatch("TeamA", "TeamB"));
+        assertThrows(IllegalStateException.class, () -> scoreBoard.startMatch("TeamA", "TeamB"));
     }
 
     // test StartMatch for empty name of team. Throws error.
     @Test
     void testStartMatchEmptyNames() {
-        assertThrows(EmptyTeamNameException.class, () -> scoreBoard.startMatch("", "TeamB"));
-        assertThrows(EmptyTeamNameException.class, () -> scoreBoard.startMatch("TeamA", ""));
+        assertThrows(IllegalArgumentException.class, () -> scoreBoard.startMatch("", "TeamB"));
+        assertThrows(IllegalArgumentException.class, () -> scoreBoard.startMatch("TeamA", ""));
     }
 
     // test startMatch for same team name. Throws error.
     @Test
     void testStartMatchSameTeamName() {
-        assertThrows(SameTeamNameException.class, () -> scoreBoard.startMatch("TeamB", "TeamB"));
-        assertThrows(SameTeamNameException.class, () -> scoreBoard.startMatch("TeamA", "TeamA"));
+        assertThrows(IllegalArgumentException.class, () -> scoreBoard.startMatch("TeamB", "TeamB"));
+        assertThrows(IllegalArgumentException.class, () -> scoreBoard.startMatch("TeamA", "TeamA"));
     }
 
     // test updateScore method for successfully updating match scores.
@@ -67,7 +68,7 @@ public class ScoreboardTest {
     // test updateScore method for updated score of match which has ended. Throws error.
     @Test
     void testUpdateScoreFailure() {
-        assertThrows(MatchNotFound.class, () -> scoreBoard.updateScore("TeamA", "TeamB", 2, 3));
+        assertThrows(NoSuchElementException.class, () -> scoreBoard.updateScore("TeamA", "TeamB", 2, 3));
     }
 
     // test finishMatch for successfully finishing match.
@@ -83,7 +84,7 @@ public class ScoreboardTest {
     //  test finishMatch for finishing a match which is already finished. Throws error.
     @Test
     void testFinishMatchFailure() {
-        assertThrows(MatchNotFound.class, () -> scoreBoard.finishMatch("TeamA", "TeamB"));
+        assertThrows(NoSuchElementException.class, () -> scoreBoard.finishMatch("TeamA", "TeamB"));
     }
 
     // test matchesSummary for providing matches in progress in the correct order.
