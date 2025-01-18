@@ -55,7 +55,7 @@ scoreboard.updateScore("Spain", "Brazil", 2, 3);
 To mark a match as finished, use the `finishMatch` method. Pass the names of the home and away teams.
 
 ```java
-scoreboard.finishMatch("Germany", "Canada");
+scoreboard.finishMatch("Spain", "Brazil");
 ```
 
 **Parameters:**
